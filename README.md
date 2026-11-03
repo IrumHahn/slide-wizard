@@ -46,4 +46,4 @@
 
 ## 라이선스
 
-[MIT](LICENSE). 포함된 글꼴 Pretendard는 SIL Open Font License 1.1을 따릅니다.
+[MIT](LICENSE). 포함된 글꼴 [Pretendard](https://github.com/orioncactus/pretendard)는 수정하지 않은 공식 파일이며 SIL Open Font License 1.1을 따릅니다([전문](decks/lecture-assets/fonts/OFL.txt)).

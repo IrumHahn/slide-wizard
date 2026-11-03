@@ -6,7 +6,7 @@
   --f:'Pretendard',-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
 }
 @font-face{font-family:'Pretendard';font-weight:45 930;font-display:swap;
-  src:url('/decks/lecture-assets/fonts/Pretendard-subset.woff2') format('woff2')}
+  src:url('/decks/lecture-assets/fonts/PretendardVariable.woff2') format('woff2')}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f)}
 button{font-family:var(--f);cursor:pointer}
