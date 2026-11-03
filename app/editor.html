@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>편집 — 한이룸의 슬라이드 마법사</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+<link rel="stylesheet" href="/app/app.css">
+<style>
+/* 상단 서식 바 */
+.fmtbar{display:flex;align-items:center;gap:4px;padding:0 8px;border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+.fmtbar button{border:0;background:transparent;color:var(--ink-2);font-size:15px;font-weight:600;
+  padding:8px 10px;border-radius:7px;min-width:36px}
+.fmtbar button:hover{background:var(--rule-soft);color:var(--ink)}
+.fmtbar .sw{width:17px;height:17px;border-radius:5px;display:inline-block;vertical-align:-3px;border:1px solid rgba(0,0,0,.15)}
+.fmtbar input[type=color]{width:30px;height:30px;border:0;padding:0;background:transparent;cursor:pointer;border-radius:6px}
+.fmtbar .hintt{font-size:12px;color:var(--grey);margin-left:6px;white-space:nowrap}
+.theme-sel{font-family:var(--f);font-size:14px;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--paper-2);color:var(--ink-2)}
+
+/* 좁은 화면(맥북 기본 해상도)에서도 상단 바가 한 줄로 — 넘치면 이름칸부터 줄고, 버튼 글자는 안 접힌다 */
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+.topbar{flex-wrap:nowrap}
+.ed-wrap{flex:1;min-height:0;height:auto}
+.topbar .logo,.topbar .savestat,.fmtbar,.theme-sel{flex:0 0 auto;white-space:nowrap}
+.title-in{flex:0 1 280px;min-width:60px;text-overflow:ellipsis}
+
+@media (max-width:1600px){
+  .topbar{gap:9px;padding:14px 16px}
+  .topbar .btn{padding:9px 12px;font-size:14px}
+  .fmtbar{padding:0 6px;gap:2px}
+  .fmtbar button{padding:7px 8px;min-width:32px;font-size:14px}
+  .fmtbar input[type=color]{width:26px;height:26px}
+  .fmtbar .hintt{display:none}
+  .theme-sel{max-width:160px;font-size:13px;padding:7px 8px}
+  .savestat{min-width:0;font-size:12.5px}
+  .title-in{flex-basis:200px;font-size:15px}
+}
+@media (max-width:1380px){
+  .title-in{flex-basis:130px}
+  #btnUndo,#btnRedo{font-size:0;padding:9px 10px}
+  #btnUndo::after{content:"↩︎";font-size:15px}
+  #btnRedo::after{content:"↪︎";font-size:15px}
+  .ed-rail{width:190px}
+}
+
+/* 이미지 레이아웃 고르기 */
+.pe-modal{position:fixed;inset:0;z-index:400;background:rgba(20,21,15,.42);display:none;align-items:center;justify-content:center}
+.pe-modal.show{display:flex}
+.pe-modal .box{background:var(--paper);border-radius:16px;padding:22px 24px;width:640px;max-width:92vw;
+  box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.pe-modal h3{margin:0 0 3px;font-size:17px}
+.pe-modal .sub{font-size:13px;color:var(--grey);margin-bottom:16px}
+.pe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pe-opt{border:1px solid var(--rule);border-radius:11px;padding:11px;background:var(--paper-2);cursor:pointer;text-align:left}
+.pe-opt:hover{border-color:var(--accent,#E1361C)}
+.pe-opt.on{border-color:var(--accent,#E1361C);box-shadow:0 0 0 2px rgba(225,54,28,.18)}
+.pe-opt .dg{position:relative;height:62px;border:1px solid var(--rule);border-radius:6px;background:#fff;overflow:hidden;margin-bottom:8px}
+.pe-opt .dg i{position:absolute;background:rgba(225,54,28,.55);display:block}
+.pe-opt .dg u{position:absolute;background:rgba(20,21,15,.16);display:block;text-decoration:none}
+.pe-opt .dg.dark{background:#14150F}
+.pe-opt .dg.dark i{background:rgba(255,255,255,.20)}
+.pe-opt b{font-size:13px;display:block}
+.pe-opt span{font-size:11.5px;color:var(--grey)}
+.pe-modal .foot{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;align-items:center}
+.pe-modal .foot .sp{flex:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="logo" href="/">← 갤러리</a>
+  <input class="title-in" id="deckTitle" value="">
+
+  <span class="fmtbar" id="fmtbar" title="글자를 드래그로 선택한 뒤 누르세요">
+    <button data-a="smaller" title="글자 작게">A−</button>
+    <button data-a="bigger" title="글자 크게">A＋</button>
+    <button data-a="bold" title="굵게"><b>B</b></button>
+    <span id="fmtSwatches"></span>
+    <input type="color" id="fmtColor" title="원하는 색 직접 고르기" value="#e1361c">
+    <button data-a="hl" title="하이라이트" style="background:linear-gradient(transparent 55%, rgba(225,54,28,.3) 55%)">가</button>
+    <button data-a="clear" title="서식 지우기">⌫</button>
+    <span class="hintt">← 글자를 드래그로 선택 후</span>
+  </span>
+
+  <button class="btn" id="btnUndo" title="되돌리기 (⌘Z)" disabled>↩︎ 되돌리기</button>
+  <button class="btn" id="btnRedo" title="다시 실행 (⇧⌘Z)" disabled>↪︎ 다시</button>
+
+  <span class="sp"></span>
+  <select class="theme-sel" id="themeSel" title="덱 전체 테마 바꾸기"></select>
+  <span class="savestat" id="saveStat">저장됨</span>
+  <button class="btn" id="btnAI">✦ AI 수정</button>
+  <button class="btn" id="btnPDF">PDF</button>
+  <button class="btn" id="btnPlay">▶ 발표</button>
+  <button class="btn primary" id="btnSave">저장</button>
+</div>
+
+<div class="ed-wrap">
+  <div class="ed-rail" id="rail"></div>
+  <div class="ed-main" id="main">
+    <iframe id="frame"></iframe>
+  </div>
+</div>
+
+<div class="ai-pane" id="aiPane">
+  <b style="font-size:14px">AI로 수정</b>
+  <select id="aiMode" style="width:100%;margin:8px 0 2px;padding:7px 8px;font:inherit;font-size:13px">
+    <option value="slide">이 장만 고치기 · 빠름 (수십 초)</option>
+    <option value="deck">덱 고치기 · 자료 조사 + 장 추가 (몇 분)</option>
+  </select>
+  <div class="st" id="aiHint" style="margin:2px 0 4px"></div>
+  <textarea id="aiText" placeholder="예: 제목을 더 강하게 / 불릿을 3개로 줄여줘"></textarea>
+  <div class="st" id="aiStat"></div>
+  <div class="row">
+    <button class="btn ghost" id="aiClose">닫기</button>
+    <button class="btn primary" id="aiGo">적용</button>
+  </div>
+</div>
+
+<style>
+.note-v{margin-top:13px;padding:11px 13px;border-radius:9px;background:var(--paper-2);
+  border:1px solid var(--rule);font-size:12.5px;line-height:1.62;color:var(--grey)}
+.note-v b{color:var(--ink);font-weight:600}
+</style>
+
+<div class="pe-modal" id="imgPane">
+  <div class="box">
+    <h3>이미지를 몇 장, 어디에 넣을까요?</h3>
+    <div class="sub" id="imgPaneSub">고르면 이 슬라이드가 그 배치에 맞게 다시 짜이고, 자리마다 이미지를 넣을 칸이 생깁니다.</div>
+    <div class="pe-grid" id="imgOpts"></div>
+    <div class="foot">
+      <button class="btn ghost" id="imgClear" style="display:none">레이아웃 해제</button>
+      <span class="sp"></span>
+      <button class="btn ghost" id="imgCancel">취소</button>
+      <button class="btn primary" id="imgGo">이 배치로</button>
+    </div>
+  </div>
+</div>
+
+<div class="pe-modal" id="vidPane">
+  <div class="box">
+    <h3>영상을 어디에 넣을까요?</h3>
+    <div class="sub" id="vidPaneSub">배치를 고르면 영상 칸이 생깁니다.</div>
+    <div class="pe-grid" id="vidOpts"></div>
+    <div class="note-v">
+      <b>소리는 항상 꺼진 채로 시작합니다.</b> 브라우저가 소리 있는 자동재생을 막기 때문입니다.
+      발표 중에 영상 위로 마우스를 올려 <b>🔊</b> 를 누르면 켜지고, 그 뒤로는 계속 켜진 채 갑니다.
+    </div>
+    <div class="foot">
+      <button class="btn ghost" id="vidClear" style="display:none">영상 배치 해제</button>
+      <span class="sp"></span>
+      <button class="btn ghost" id="vidCancel">취소</button>
+      <button class="btn primary" id="vidGo">이 배치로</button>
+    </div>
+  </div>
+</div>
+
+<div class="pe-modal" id="newPane">
+  <div class="box">
+    <h3>어떤 슬라이드를 넣을까요?</h3>
+    <div class="sub" id="newPaneSub">고른 폼이 지금 보는 장 바로 뒤에 들어갑니다. 넣은 뒤 글자를 눌러 고치세요.</div>
+    <div class="pe-grid" id="newOpts"></div>
+    <div class="foot">
+      <span class="sp"></span>
+      <button class="btn ghost" id="newCancel">취소</button>
+      <button class="btn primary" id="newGo">이 폼으로 추가</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/app/editor.js"></script>
+</body>
+</html>

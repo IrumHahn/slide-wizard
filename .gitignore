@@ -1,0 +1,16 @@
+# 내 슬라이드는 내 컴퓨터에만 둔다. GitHub 에 올라가지 않는다.
+decks/*
+!decks/how-to-use.html
+!decks/lecture-assets/
+decks/lecture-assets/*
+!decks/lecture-assets/fonts/
+assets/
+config/folders.json
+.shots/
+
+logs/
+node_modules/
+.DS_Store
+Thumbs.db
+.env
+.env.*

@@ -1,0 +1,11 @@
+{
+  "id": "bold-poster",
+  "name": "볼드 포스터",
+  "description": "검은 바탕에 굵은 활자 — 강한 주장, 짧은 문장에 어울림",
+  "tokens": { "ink": "#F2EFE8", "paper": "#0A0C0B", "accent": "#FFD437", "accent2": "#E8B800" },
+  "fonts": {
+    "display": "Black Han Sans",
+    "cssImports": ["<link href=\"https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap\" rel=\"stylesheet\">"]
+  },
+  "extraCss": ".slide--title h1,.slide--section h2{font-family:var(--f-display);font-weight:400;letter-spacing:0}\n.card{background:color-mix(in srgb, var(--paper) 84%, white)}\n.slide--section{background:var(--accent)}\n.slide--section h2,.slide--section .num{color:var(--paper)}\n.slide--section .kick,.slide--section .note{color:color-mix(in srgb, var(--paper) 70%, transparent)}"
+}

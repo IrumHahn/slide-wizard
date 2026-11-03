@@ -1,0 +1,11 @@
+{
+  "id": "editorial-serif",
+  "name": "에디토리얼 세리프",
+  "description": "잡지 같은 명조 헤드라인 — 차분하고 신뢰감 있는 톤",
+  "tokens": { "ink": "#1A1815", "paper": "#FAF7F0", "accent": "#8A6D3B", "accent2": "#5C4827" },
+  "fonts": {
+    "display": "Noto Serif KR",
+    "cssImports": ["<link href=\"https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap\" rel=\"stylesheet\">"]
+  },
+  "extraCss": ".slide h2,.slide--title h1,.slide--quote .q,.slide--closing .statement{font-family:var(--f-display)}"
+}

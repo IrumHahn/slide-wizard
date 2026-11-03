@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한이룸의 슬라이드 마법사</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪄</text></svg>">
+<link rel="stylesheet" href="/app/app.css">
+</head>
+<body>
+
+<div class="topbar">
+  <a class="logo" href="/">한이룸의 <b>슬라이드 마법사</b></a>
+  <span class="sp"></span>
+  <a class="btn" href="/guide/" target="_blank">📖 가이드</a>
+  <button class="btn" id="btnBlank">+ 빈 덱</button>
+  <button class="btn primary" id="btnAI">✦ AI로 만들기</button>
+</div>
+
+<div class="layout">
+  <aside class="fside">
+    <div class="fside-h">폴더</div>
+    <div id="folderList"></div>
+    <button class="fadd" id="btnNewFolder">+ 새 폴더</button>
+  </aside>
+  <section class="fmain">
+    <div class="fhead">
+      <h2 id="curName">전체</h2>
+      <span class="cnt" id="curCount"></span>
+      <span class="sp"></span>
+      <button class="btn sm" id="btnRenameFolder" style="display:none">이름 바꾸기</button>
+      <button class="btn sm" id="btnDeleteFolder" style="display:none">폴더 삭제</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">아직 발표자료가 없습니다. 「AI로 만들기」로 시작해 보세요.</div>
+  </section>
+</div>
+
+<!-- 새 덱 모달 -->
+<div class="modal-bg" id="mkBg">
+  <div class="modal">
+    <h3 id="mkTitle">AI로 발표자료 만들기</h3>
+    <p class="hint" id="mkHint">주제와 재료를 주면 개요를 짜고 슬라이드를 만들어 갤러리에 넣습니다.</p>
+    <label>제목</label>
+    <input type="text" id="fTitle" placeholder="예: AI 이커머스 상세페이지 기술">
+    <div id="aiFields">
+      <label>주제 · 요청</label>
+      <textarea id="fTopic" placeholder="누구에게, 무엇을, 어떤 톤으로 이야기할지 적어 주세요."></textarea>
+      <label>재료 (선택 — 후기·데이터·글 등을 붙여넣으면 그대로 반영)</label>
+      <textarea id="fMaterials"></textarea>
+      <label>장수</label>
+      <input type="text" id="fCount" value="15">
+    </div>
+    <label>폴더</label>
+    <select id="fFolder"></select>
+    <label>디자인 템플릿</label>
+    <div class="tpl-pick" id="tplPick"></div>
+    <p class="hint" id="engineHint"></p>
+    <div class="jobbox" id="jobBox" style="display:none">
+      <div class="ph" id="jobPhase">준비 중…</div>
+      <div class="dt" id="jobDetail"></div>
+      <div class="bar"><i></i></div>
+    </div>
+    <div class="foot">
+      <button class="btn ghost" id="mkCancel">닫기</button>
+      <button class="btn primary" id="mkGo">만들기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 폴더 이동 모달 -->
+<div class="modal-bg" id="mvBg">
+  <div class="modal" style="width:min(420px,92vw)">
+    <h3>폴더로 이동</h3>
+    <p class="hint" id="mvHint"></p>
+    <div class="flist" id="mvList"></div>
+    <div class="foot">
+      <button class="btn ghost" id="mvCancel">닫기</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/app/gallery.js"></script>
+</body>
+</html>

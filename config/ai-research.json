@@ -1,0 +1,32 @@
+{
+  "_comment": "Claude Code 의 「AI 수정 · 자료 조사」가 읽을 수 있는 폴더. 기본은 비어 있다. 절대경로를 넣으면 Claude Code 가 그 폴더를 읽는다(읽기만 한다). 계약서·개인정보가 있는 폴더는 넣지 말 것. Codex 버튼은 이 설정을 쓰지 않는다.",
+  "dirs": [],
+  "_deny_comment": "파일 이름 규칙. 앞에 **/ 를 직접 붙이지 말 것.",
+  "denyPatterns": [
+    ".env",
+    ".env.*",
+    ".dev.vars",
+    ".dev.vars.*",
+    ".npmrc",
+    "*.local.json",
+    ".*token*",
+    "*token*",
+    "*secret*",
+    "*credential*",
+    "*password*",
+    "*.pem",
+    "*.key",
+    "id_rsa*",
+    "*.csv"
+  ],
+  "_denyDirs_comment": "통째로 막을 하위 폴더.",
+  "denyDirs": [
+    ".git",
+    ".ssh",
+    ".aws",
+    "node_modules",
+    "data/projects",
+    "data/sessions",
+    "backups"
+  ]
+}

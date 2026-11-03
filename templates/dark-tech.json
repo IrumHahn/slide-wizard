@@ -1,0 +1,8 @@
+{
+  "id": "dark-tech",
+  "name": "다크 테크",
+  "description": "짙은 남색 바탕에 파란 악센트 — 데이터·기술 발표용",
+  "tokens": { "ink": "#F5F1E8", "paper": "#0D1017", "accent": "#5B9DFF", "accent2": "#2D6BD9" },
+  "fonts": { "cssImports": [] },
+  "extraCss": ".card{background:color-mix(in srgb, var(--paper) 80%, white);border-color:color-mix(in srgb, var(--ink) 14%, transparent)}\n.shot{background:#151a24}"
+}

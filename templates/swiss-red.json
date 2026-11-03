@@ -1,0 +1,8 @@
+{
+  "id": "swiss-red",
+  "name": "스위스 레드",
+  "description": "종이 바탕에 빨간 악센트, 단정한 그리드 — 강의·보고에 잘 어울림",
+  "tokens": { "ink": "#14150F", "paper": "#F5F2EB", "accent": "#E1361C", "accent2": "#B32812" },
+  "fonts": { "cssImports": [] },
+  "extraCss": ""
+}
